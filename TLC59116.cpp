@@ -31,6 +31,22 @@
 
 #include <TLC59116.h>
 
+static inline void wiresend(unsigned char x) {
+#if ARDUINO >= 100
+    Wire.write((unsigned char)x);
+#else
+    Wire.send(x);
+#endif
+}
+
+static inline unsigned char wirerecv(void) {
+#if ARDUINO >= 100
+    return Wire.read();
+#else
+    return Wire.receive();
+#endif
+}
+
 TLC59116::TLC59116() {
     _addr = 0;
 }
@@ -69,8 +85,8 @@ void TLC59116::begin() {
 
 void TLC59116::writeRegister(uint8_t reg, uint8_t val) {
     Wire.beginTransmission(TLC59116_BASEADDR | (_addr & 0x0F));
-    Wire.send(reg);
-    Wire.send(val);
+    wiresend(reg);
+    wiresend(val);
     Wire.endTransmission();
 }
 
