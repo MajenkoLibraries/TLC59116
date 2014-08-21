@@ -79,22 +79,37 @@
 #define TLC59116_EFLAG1     0x1D
 #define TLC59116_EFLAG2     0x1E
 
+/*! The TLC59116 library drives a TLC59116 PWM LED Driver chip over I2C.  It allows the control of each output via
+ *  functions that work the same as the normal Arduinop analogWrite() function.  There is also a pin mapping facility
+ *  for displaying numeric values on a 7 segment display.
+ */
+
 class TLC59116 {
     private:
-        // Private functions and variables here.  They can only be accessed
-        // by functions within the class.
         uint8_t _addr;
         void writeRegister(uint8_t reg, uint8_t val);
         uint8_t _begun;
+        static const uint8_t pinmap[8];
+        static const uint8_t numbers[10];
+
+        const uint8_t *_currentPinMapping;
 
     public:
-        // Public functions and variables.  These can be accessed from
-        // outside the class.
+        /*! Create a new TLC59116 board with the default address of 0 */
         TLC59116();
+        /*! Create a new TLC59116 board with the default provided address */
         TLC59116(uint8_t addr);
+        /*! Initialize the board, set all channels to 0, and apply the default pin mapping */
         void begin();
-        void analogWrite(uint8_t chan, uint8_t b);
-
-
+        /*! Set the channel (0-15) to the given brightness value (0-255) */
+        void analogWrite(uint8_t channel, uint8_t brightness);
+        /*! Display the given number at the specified brightness using the current pin mapping */
+        void displayNumber(uint8_t number, uint8_t brightness);
+        /*! Load a new pin mapping.
+         *
+         * Pin mappings are in the form of an 8-byte array with each byte representing the mapping for segments A to G and DP in that order.
+         * The upper nibble (4 bits) of each byte is the analog channel number for the left-hand digit. The lower nibble is the channel number for the right-hand digit.
+         */
+        void setPinMapping(const uint8_t *mapping);
 };
 #endif

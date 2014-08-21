@@ -31,6 +31,30 @@
 
 #include <TLC59116.h>
 
+const uint8_t TLC59116::pinmap[8] = {
+    10 << 4 | 14,
+    11 << 4 | 15,
+    5 << 4 | 1,
+    6 << 4 | 2,
+    7 << 4 | 3,
+    9 << 4 | 13,
+    8 << 4 | 12,
+    4 << 4 | 0
+};
+
+const uint8_t TLC59116::numbers[] = {
+    0b00111111,
+    0b00000110,
+    0b01011011,
+    0b01001111,
+    0b01100110,
+    0b01101101,
+    0b01111101,
+    0b00100111,
+    0b01111111,
+    0b01101111
+};
+
 static inline void wiresend(unsigned char x) {
 #if ARDUINO >= 100
     Wire.write((unsigned char)x);
@@ -83,6 +107,7 @@ void TLC59116::begin() {
         this->analogWrite(13, 0);
         this->analogWrite(14, 0);
         this->analogWrite(15, 0);
+        setPinMapping(pinmap);
     }
     _begun = 1;
 }
@@ -97,4 +122,42 @@ void TLC59116::writeRegister(uint8_t reg, uint8_t val) {
 
 void TLC59116::analogWrite(uint8_t chan, uint8_t b) {
     writeRegister(TLC59116_PWM0 + (chan & 0x0F), b);
+}
+
+void TLC59116::displayNumber(uint8_t number, uint8_t b) {
+
+    uint8_t tens = (number / 10) % 10;
+    uint8_t units = number % 10;
+
+    if (tens == 0) {
+        for (int i = 0; i < 8; i++) {
+            int seg = _currentPinMapping[i] >> 4;
+            this->analogWrite(seg, 0);
+        }
+    } else {
+        int num = numbers[tens];
+        for (int i = 0; i < 8; i++) {
+            int seg = _currentPinMapping[i] >> 4;
+            if (num & (1<<i)) {
+                this->analogWrite(seg, b);
+            } else {
+                this->analogWrite(seg, 0);
+            }
+        }
+    }
+
+    int num = numbers[units];
+    for (int i = 0; i < 8; i++) {
+        int seg = _currentPinMapping[i] & 0x0F;
+        if (num & (1<<i)) {
+            this->analogWrite(seg, b);
+        } else {
+            this->analogWrite(seg, 0);
+        }
+    }
+
+}
+
+void TLC59116::setPinMapping(const uint8_t *map) {
+    _currentPinMapping = map;
 }
