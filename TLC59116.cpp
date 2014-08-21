@@ -49,37 +49,42 @@ static inline unsigned char wirerecv(void) {
 
 TLC59116::TLC59116() {
     _addr = 0;
+    _begun = 0;
 }
 
 TLC59116::TLC59116(uint8_t addr) {
     _addr = addr;
+    _begun = 0;
 }
 
 void TLC59116::begin() {
-    Wire.begin();
-    writeRegister(TLC59116_MODE1, 0x01);
-    delay(1);
-    writeRegister(TLC59116_MODE2, 0x00);
-    writeRegister(TLC59116_LEDOUT0, 0b10101010);
-    writeRegister(TLC59116_LEDOUT1, 0b10101010);
-    writeRegister(TLC59116_LEDOUT2, 0b10101010);
-    writeRegister(TLC59116_LEDOUT3, 0b10101010);
-    this->analogWrite(0, 0);
-    this->analogWrite(1, 0);
-    this->analogWrite(2, 0);
-    this->analogWrite(3, 0);
-    this->analogWrite(4, 0);
-    this->analogWrite(5, 0);
-    this->analogWrite(6, 0);
-    this->analogWrite(7, 0);
-    this->analogWrite(8, 0);
-    this->analogWrite(9, 0);
-    this->analogWrite(10, 0);
-    this->analogWrite(11, 0);
-    this->analogWrite(12, 0);
-    this->analogWrite(13, 0);
-    this->analogWrite(14, 0);
-    this->analogWrite(15, 0);
+    if (_begun == 0) {
+        Wire.begin();
+        writeRegister(TLC59116_MODE1, 0x01);
+        delay(1);
+        writeRegister(TLC59116_MODE2, 0x00);
+        writeRegister(TLC59116_LEDOUT0, 0b10101010);
+        writeRegister(TLC59116_LEDOUT1, 0b10101010);
+        writeRegister(TLC59116_LEDOUT2, 0b10101010);
+        writeRegister(TLC59116_LEDOUT3, 0b10101010);
+        this->analogWrite(0, 0);
+        this->analogWrite(1, 0);
+        this->analogWrite(2, 0);
+        this->analogWrite(3, 0);
+        this->analogWrite(4, 0);
+        this->analogWrite(5, 0);
+        this->analogWrite(6, 0);
+        this->analogWrite(7, 0);
+        this->analogWrite(8, 0);
+        this->analogWrite(9, 0);
+        this->analogWrite(10, 0);
+        this->analogWrite(11, 0);
+        this->analogWrite(12, 0);
+        this->analogWrite(13, 0);
+        this->analogWrite(14, 0);
+        this->analogWrite(15, 0);
+    }
+    _begun = 1;
 }
 
 

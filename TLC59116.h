@@ -85,6 +85,7 @@ class TLC59116 {
         // by functions within the class.
         uint8_t _addr;
         void writeRegister(uint8_t reg, uint8_t val);
+        uint8_t _begun;
 
     public:
         // Public functions and variables.  These can be accessed from
