@@ -1,0 +1,8 @@
+Documentation/latex/refman.pdf libraries/IO/TLC59116/Documentation/latex
+Doxyfile libraries/IO/TLC59116/
+LICENSE.md usr/share/doc/libtlc59116/
+README.md usr/share/doc/libtlc59116/
+TLC59116.cpp libraries/IO/TLC59116/
+TLC59116.h libraries/IO/TLC59116/
+examples/GlowingNumbers/GlowingNumbers.ino libraries/IO/TLC59116/examples/GlowingNumbers
+examples/SineWave/SineWave.ino libraries/IO/TLC59116/examples/SineWave
