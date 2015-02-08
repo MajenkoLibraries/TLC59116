@@ -8,5 +8,6 @@ Standards-Version: 3.9.4
 
 Package: libtlc59116
 Architecture: all
+Provodes: TLC59116.h
 Description: TLC59116 library
 
